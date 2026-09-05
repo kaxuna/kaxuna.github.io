@@ -1,0 +1,22 @@
+import { chromium } from 'playwright';
+const browser = await chromium.launch({ channel: 'chrome' });
+const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
+await page.goto('http://localhost:5173/#pipeline', { waitUntil: 'networkidle' });
+await page.locator('#pipeline-canvas').scrollIntoViewIfNeeded();
+await page.waitForTimeout(800);
+const c = page.locator('#pipeline-canvas'); const b = await c.boundingBox(); const s = b.width / 1000;
+const gx = b.x + 760 * s, gy = b.y + 250 * s;
+await page.mouse.move(gx, gy); await page.mouse.down();
+for (let i = 1; i <= 12; i++) { await page.mouse.move(gx - 15 * i, gy - 12 * i); await page.waitForTimeout(16); }
+await page.waitForTimeout(150);
+await c.screenshot({ path: 'shots/drag-mid.png' });
+await page.mouse.up();
+await page.waitForTimeout(140);
+await c.screenshot({ path: 'shots/drag-overshoot.png' });
+await page.waitForTimeout(1500);
+await c.screenshot({ path: 'shots/drag-settled.png' });
+const panelAfterDrag = await page.evaluate(() => document.getElementById('panel').classList.contains('open'));
+await page.mouse.click(gx, gy); await page.waitForTimeout(300);
+const panelAfterClick = await page.evaluate(() => document.getElementById('panel').classList.contains('open'));
+console.log({ panelAfterDrag, panelAfterClick });
+await browser.close();
