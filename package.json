@@ -8,7 +8,8 @@
     "build": "tsc && vite build",
     "preview": "vite preview",
     "shots": "mkdir -p shots && node tools/shot.mjs",
-    "artifact": "node tools/artifact.mjs"
+    "artifact": "node tools/artifact.mjs",
+    "og": "node tools/og.mjs"
   },
   "devDependencies": {
     "playwright": "^1.63.0",

@@ -32,7 +32,7 @@ export const profile = {
   email: 'kakhapilauri@gmail.com',
   github: 'https://github.com/kaxuna',
   githubUser: 'kaxuna',
-  linkedin: 'https://www.linkedin.com/in/kakha-philauri/',
+  linkedin: 'https://www.linkedin.com/in/kakha-philauri-61a260147/',
   leetcode: 'https://leetcode.com/u/kaxuna/',
   languages: [
     { name: 'English', level: 'fluent' },

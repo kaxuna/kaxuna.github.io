@@ -16,6 +16,9 @@ $('hero-links').innerHTML = [
   ['LeetCode', profile.leetcode],
   ['Email', `mailto:${profile.email}`],
 ].map(([l, h]) => `<a href="${h}" target="_blank" rel="noopener">${l} ↗</a>`).join('');
+const photo = $<HTMLImageElement>('hero-photo');
+photo.addEventListener('load', () => { photo.hidden = false; photo.alt = profile.name; });
+if (photo.complete && photo.naturalWidth > 0) { photo.hidden = false; photo.alt = profile.name; }
 $('hero-stats').innerHTML = headlineStats.map((s) => `<li><b>${s.value}</b><span>${s.label}</span></li>`).join('');
 
 // ---------- tabs ----------

@@ -43,6 +43,9 @@ button { font: inherit; cursor: pointer; }
 .hero { padding: 48px 20px 8px; }
 .hero-inner { max-width: var(--maxw); margin: 0 auto; }
 .hero-top { display: flex; justify-content: space-between; gap: 24px; align-items: flex-start; flex-wrap: wrap; }
+.hero-id { display: flex; gap: 20px; align-items: center; }
+.avatar { width: 88px; height: 88px; border-radius: 50%; object-fit: cover; border: 2px solid var(--line); box-shadow: 0 0 0 4px rgba(79,140,255,.12); flex: 0 0 auto; }
+@media (max-width: 640px) { .avatar { width: 64px; height: 64px; } .hero-id { gap: 14px; } }
 .eyebrow { font-family: var(--mono); color: var(--accent-2); font-size: 13px; margin: 0 0 8px; }
 h1 { font-size: clamp(32px, 5vw, 52px); font-weight: 700; line-height: 1.05; }
 .title { color: var(--muted); font-size: 17px; margin: 8px 0 0; }
