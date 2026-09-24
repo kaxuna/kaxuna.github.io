@@ -2,122 +2,135 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Kakha Philauri — backend software engineer on Google BigQuery. Interactive portfolio: a career pipeline, a SQL console over my resume, and a terminal." />
-    <meta name="theme-color" content="#0b0f17" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="description" content="Kakha Philauri, backend engineer on Google BigQuery. Play through his career as a side-scroller: ten stages from a maths olympiad to BigQuery." />
+    <meta name="theme-color" content="#0b1020" />
     <meta property="og:type" content="website" />
-    <meta property="og:title" content="Kakha Philauri · Backend engineer, Google BigQuery" />
-    <meta property="og:description" content="Career as an interactive data pipeline, a SQL console over my resume, and a terminal. No backend." />
+    <meta property="og:title" content="Kakha Philauri · Ten Stages" />
+    <meta property="og:description" content="A career as a side-scroller. Hit blocks for achievements, grab gems for skills, stomp bugs." />
     <meta property="og:url" content="https://kaxuna.github.io/" />
     <meta property="og:image" content="https://kaxuna.github.io/og.png" />
     <meta name="twitter:card" content="summary_large_image" />
-    <title>Kakha Philauri · Pipeline</title>
+    <title>Kakha Philauri · Ten Stages</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230b0f17'/><circle cx='50' cy='50' r='22' fill='%234f8cff'/><circle cx='50' cy='50' r='9' fill='%230b0f17'/></svg>" />
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Pixelify+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' shape-rendering='crispEdges'><rect width='16' height='16' fill='%237a4a0a'/><rect x='1' y='1' width='14' height='14' fill='%23f7b733'/><path d='M5 4h2v1H6v2H5v1h1v2h1v1H5v-1H4V8H3V7h1V5h1z M11 4H9v1h1v2h1v1h-1v2H9v1h2v-1h1V8h1V7h-1V5h-1z' fill='%237a4a0a'/></svg>" />
   </head>
   <body>
-    <header class="hero">
-      <div class="hero-inner">
-        <div class="hero-top">
-          <div class="hero-id">
-            <img class="avatar" id="hero-photo" src="./photo.jpg" alt="" width="88" height="88" hidden />
-            <div>
-            <p class="eyebrow">// backend · data infrastructure · Warsaw</p>
-            <h1 id="hero-name"></h1>
-            <p class="title" id="hero-title"></p>
-            </div>
-          </div>
-          <nav class="links" id="hero-links"></nav>
-        </div>
-        <p class="summary" id="hero-summary"></p>
-        <ul class="stats" id="hero-stats"></ul>
-      </div>
-    </header>
+    <div id="app">
+      <div id="stage">
+        <div id="screen-wrap">
+          <canvas id="screen" width="320" height="240" role="img" aria-label="Side-scrolling game: Kakha Philauri's career in ten stages"></canvas>
+          <div id="bubble" class="bubble" hidden></div>
 
-    <nav class="tabs" role="tablist" aria-label="Sections">
-      <a href="#pipeline" data-tab="pipeline" role="tab" class="tab">Pipeline</a>
-      <a href="#sql" data-tab="sql" role="tab" class="tab">SQL console</a>
-      <a href="#skills" data-tab="skills" role="tab" class="tab">Skills</a>
-      <button type="button" class="tab tab-term" id="open-terminal" title="Open terminal (press ~)">~ terminal</button>
-    </nav>
-
-    <main>
-      <section id="pipeline" class="view" data-view="pipeline">
-        <div class="view-head">
-          <h2>Career as a data pipeline</h2>
-          <p>Every stage is clickable, and draggable if you feel like it. The pipes stretch, then everything snaps back where it belongs: warehouses feed the hub, the hub lands in BigQuery, and a side project runs in production on its own lane.</p>
-        </div>
-        <div class="pipeline-wrap">
-          <canvas id="pipeline-canvas" aria-label="Interactive career pipeline"></canvas>
-          <div class="legend" id="pipeline-legend"></div>
-        </div>
-        <ol class="pipeline-fallback" id="pipeline-fallback" aria-label="Career stages"></ol>
-      </section>
-
-      <section id="sql" class="view" data-view="sql" hidden>
-        <div class="view-head">
-          <h2>Query my resume</h2>
-          <p>Real SQL, real database, no server. DuckDB runs entirely in your browser. Tables: <code>experience</code>, <code>highlights</code>, <code>skills</code>, <code>projects</code>, <code>warehouses</code>, <code>leetcode</code>, <code>languages</code>.</p>
-        </div>
-        <div class="sql-layout">
-          <div class="sql-editor-col">
-            <div class="presets" id="sql-presets"></div>
-            <div class="editor-box">
-              <textarea id="sql-input" spellcheck="false" rows="7" aria-label="SQL query"></textarea>
-              <div class="editor-actions">
-                <span class="status" id="sql-status">DuckDB not loaded yet</span>
-                <div>
-                  <button type="button" class="btn ghost" id="sql-translate" title="Toy Teradata → BigQuery translator">Translate TD → BQ</button>
-                  <button type="button" class="btn primary" id="sql-run">Run <kbd>⌘↵</kbd></button>
-                </div>
+          <header class="hud">
+            <div class="hud-row">
+              <div class="hud-stage">
+                <span class="hud-num" id="hud-num">1</span>
+                <span class="hud-text"><b id="hud-title">High school</b><span id="hud-period"></span></span>
+              </div>
+              <div class="hud-counts">
+                <span class="count" title="Achievements found"><img id="ic-star" alt="Achievements" /><b id="c-ach">0</b><i>/<span id="c-ach-t">0</span></i></span>
+                <span class="count" title="Skills collected"><img id="ic-gem" alt="Skills" /><b id="c-gem">0</b><i>/<span id="c-gem-t">0</span></i></span>
+                <span class="count" title="Bugs squashed"><img id="ic-bug" alt="Bugs" /><b id="c-bug">0</b></span>
+              </div>
+              <div class="hud-btns">
+                <button type="button" class="hud-btn" id="btn-log" title="Logbook (L)">Logbook</button>
+                <button type="button" class="hud-btn" id="btn-sound" title="Sound (M)" aria-pressed="true">Sound on</button>
               </div>
             </div>
-            <pre class="translate-out" id="sql-translate-out" hidden></pre>
+            <nav class="minimap" id="minimap" aria-label="Jump to a stage"></nav>
+          </header>
+
+          <div class="banner" id="banner" hidden>
+            <span class="banner-kicker" id="banner-kicker">Stage 1</span>
+            <span class="banner-title" id="banner-title">High school</span>
+            <span class="banner-meta" id="banner-meta"></span>
           </div>
-          <div class="sql-result-col">
-            <div class="result-meta" id="sql-meta"></div>
-            <div class="chart" id="sql-chart" hidden></div>
-            <div class="result-table-wrap" id="sql-result"></div>
-          </div>
+          <div class="toasts" id="toasts" aria-live="polite"></div>
         </div>
-        <details class="schema">
-          <summary>Schema</summary>
-          <pre id="sql-schema"></pre>
-        </details>
-      </section>
-
-      <section id="skills" class="view" data-view="skills" hidden>
-        <div class="view-head">
-          <h2>Skills</h2>
-          <p>Approximate years of hands-on use. Hover a bar for where it was used.</p>
-        </div>
-        <div class="skills-grid" id="skills-grid"></div>
-      </section>
-    </main>
-
-    <aside class="panel" id="panel" aria-hidden="true">
-      <button type="button" class="panel-close" id="panel-close" aria-label="Close">×</button>
-      <div class="panel-body" id="panel-body"></div>
-    </aside>
-    <div class="panel-backdrop" id="panel-backdrop"></div>
-
-    <div class="terminal" id="terminal" hidden>
-      <div class="terminal-bar">
-        <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
-        <span class="terminal-title">kakha@bigquery — zsh</span>
-        <button type="button" class="terminal-close" id="terminal-close" aria-label="Close terminal">esc</button>
       </div>
-      <div class="terminal-screen" id="terminal-screen"></div>
-      <div class="terminal-hints">try: <b>help</b> · <b>ls</b> · <b>cat google.md</b> · <b>git log --graph</b> · <b>top</b> · <b>curl github</b> · <b>piano</b></div>
+
+      <section id="dock" aria-live="polite">
+        <p class="dock-kicker" id="dock-kicker">Stage 1 of 10</p>
+        <h2 class="dock-title" id="dock-title">High school</h2>
+        <p class="dock-meta" id="dock-meta"></p>
+        <p class="dock-blurb" id="dock-blurb"></p>
+        <p class="dock-progress" id="dock-progress"></p>
+        <div class="dock-latest" id="dock-latest" hidden></div>
+        <div class="dock-links">
+          <button type="button" class="btn small" id="dock-log">Logbook</button>
+          <a class="btn small ghost" href="./classic/">Read as a page</a>
+        </div>
+      </section>
+
+      <div id="controls" aria-hidden="true">
+        <div class="dpad" id="dpad">
+          <span class="dp dp-l"><svg viewBox="0 0 8 8" shape-rendering="crispEdges"><path d="M5 1h1v6H5V6H4V5H3V3h1V2h1z" /></svg></span>
+          <span class="dp dp-r"><svg viewBox="0 0 8 8" shape-rendering="crispEdges"><path d="M2 1h1v1h1v1h1v2H4v1H3v1H2z" /></svg></span>
+        </div>
+        <button type="button" class="jump-btn" id="btn-jump" tabindex="-1">Jump</button>
+      </div>
     </div>
 
-    <footer class="footer">
-      <span>Built with TypeScript, canvas and DuckDB-WASM. No backend, no tracking.</span>
-      <span>Press <kbd>~</kbd> anywhere for the terminal.</span>
-    </footer>
+    <div class="modal" id="title-screen" role="dialog" aria-modal="true" aria-labelledby="title-name">
+      <div class="panel title-panel">
+        <div class="title-top">
+          <img src="./photo.jpg" class="title-photo" alt="Kakha with his dog" width="96" height="96" />
+          <div>
+            <p class="kicker">A career in ten stages</p>
+            <h1 id="title-name">Kakha Philauri</h1>
+            <p class="sub">Backend engineer on Google BigQuery.<br />Maintainer of the Dumper.</p>
+          </div>
+        </div>
+        <p class="lede">Play through it: a maths olympiad, Lund, a pandemic plot twist, four jobs in Tbilisi, and BigQuery in Warsaw. Hit the <b class="amber">{ }</b> blocks for achievements, grab <b class="teal">gems</b> for skills, and stomp the <b class="red">bugs</b>.</p>
+        <div class="actions">
+          <button type="button" class="btn primary" id="btn-start">Start</button>
+          <button type="button" class="btn" id="btn-continue" hidden>Continue</button>
+        </div>
+        <p class="keys keys-kbd"><kbd>←</kbd> <kbd>→</kbd> move · <kbd>↑</kbd> or <kbd>Space</kbd> jump, hold to jump higher · <kbd>L</kbd> logbook · <kbd>M</kbd> sound</p>
+        <p class="keys keys-touch">Use the buttons under the game. Hold Jump to jump higher.</p>
+        <p class="alt">Not in the mood to play? <a href="./classic/">Read it as a page</a>, or open the <button type="button" class="linkish" id="btn-title-log">logbook</button>.</p>
+      </div>
+    </div>
 
-    <script type="module" src="/src/main.ts"></script>
+    <div class="modal" id="logbook" role="dialog" aria-modal="true" aria-labelledby="log-title" hidden>
+      <div class="panel log-panel">
+        <div class="log-head">
+          <div>
+            <p class="kicker">Everything in the game, as text</p>
+            <h2 id="log-title">Logbook</h2>
+          </div>
+          <button type="button" class="close" id="log-close" aria-label="Close logbook">×</button>
+        </div>
+        <div class="log-tools">
+          <label class="toggle"><input type="checkbox" id="log-all" /> Show entries I haven’t found yet</label>
+          <span class="log-summary" id="log-summary"></span>
+        </div>
+        <div class="log-body" id="log-body"></div>
+        <div class="log-foot">
+          <a href="./classic/">Classic page</a>
+          <button type="button" class="linkish" id="log-reset">Reset progress</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal" id="end-screen" role="dialog" aria-modal="true" aria-labelledby="end-title" hidden>
+      <div class="panel end-panel">
+        <p class="kicker">Stage clear · 2026</p>
+        <h2 id="end-title">That’s the whole map, so far.</h2>
+        <ul class="end-stats" id="end-stats"></ul>
+        <p class="end-copy">The next stage isn’t built yet. If your team needs a backend or data-infrastructure engineer who ships, let’s talk.</p>
+        <div class="end-links" id="end-links"></div>
+        <div class="actions">
+          <button type="button" class="btn" id="end-log">Open logbook</button>
+          <button type="button" class="btn" id="end-replay">Play again from stage 1</button>
+          <button type="button" class="btn ghost" id="end-close">Keep exploring</button>
+        </div>
+      </div>
+    </div>
+
+    <script type="module" src="/src/game/main.ts"></script>
   </body>
 </html>

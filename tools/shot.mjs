@@ -1,6 +1,6 @@
 // Screenshot script: uses installed Google Chrome through Playwright's chrome channel.
 import { chromium, devices } from 'playwright';
-const base = 'http://localhost:5173/';
+const base = 'http://localhost:5174/classic/';
 const out = 'shots/';
 const browser = await chromium.launch({ channel: 'chrome' });
 

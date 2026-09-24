@@ -1,5 +1,5 @@
 import './style.css';
-import { profile, headlineStats, experiences, skills, formatPeriod, type Experience } from './data';
+import { profile, headlineStats, experiences, skills, formatPeriod, type Experience } from '../data';
 import { mountPipeline, sinkDescription, warehouseDescription, type PipelineSelection } from './pipeline';
 import { mountSql } from './sql';
 import { mountTerminal } from './terminal';
@@ -15,7 +15,8 @@ $('hero-links').innerHTML = [
   ['LinkedIn', profile.linkedin],
   ['LeetCode', profile.leetcode],
   ['Email', `mailto:${profile.email}`],
-].map(([l, h]) => `<a href="${h}" target="_blank" rel="noopener">${l} ↗</a>`).join('');
+].map(([l, h]) => `<a href="${h}" target="_blank" rel="noopener">${l} ↗</a>`).join('') +
+  '<a href="../" class="play-link">▶ Play the game</a>';
 const photo = $<HTMLImageElement>('hero-photo');
 photo.addEventListener('load', () => { photo.hidden = false; photo.alt = profile.name; });
 if (photo.complete && photo.naturalWidth > 0) { photo.hidden = false; photo.alt = profile.name; }
@@ -30,7 +31,7 @@ function showView(name: string) {
   const target = known ? name : 'pipeline';
   for (const v of views) v.hidden = v.dataset.view !== target;
   for (const t of tabs) t.classList.toggle('active', t.dataset.tab === target);
-  document.title = `Kakha Philauri · ${target === 'sql' ? 'SQL console' : target[0].toUpperCase() + target.slice(1)}`;
+  document.title = `Kakha Philauri · Classic · ${target === 'sql' ? 'SQL console' : target[0].toUpperCase() + target.slice(1)}`;
   if (target === 'sql' && !sqlWarmed) { sqlWarmed = true; void sql.warm(); }
 }
 window.addEventListener('hashchange', () => showView(location.hash.slice(1)));

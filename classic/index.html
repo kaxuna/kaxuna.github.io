@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Kakha Philauri — backend software engineer on Google BigQuery. Interactive portfolio: a career pipeline, a SQL console over my resume, and a terminal." />
+    <meta name="theme-color" content="#0b0f17" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Kakha Philauri · Backend engineer, Google BigQuery" />
+    <meta property="og:description" content="Career as an interactive data pipeline, a SQL console over my resume, and a terminal. No backend." />
+    <meta property="og:url" content="https://kaxuna.github.io/classic/" />
+    <meta property="og:image" content="https://kaxuna.github.io/og.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <title>Kakha Philauri · Classic</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230b0f17'/><circle cx='50' cy='50' r='22' fill='%234f8cff'/><circle cx='50' cy='50' r='9' fill='%230b0f17'/></svg>" />
+  </head>
+  <body>
+    <header class="hero">
+      <div class="hero-inner">
+        <div class="hero-top">
+          <div class="hero-id">
+            <img class="avatar" id="hero-photo" src="../photo.jpg" alt="" width="88" height="88" hidden />
+            <div>
+            <p class="eyebrow">// backend · data infrastructure · Warsaw</p>
+            <h1 id="hero-name"></h1>
+            <p class="title" id="hero-title"></p>
+            </div>
+          </div>
+          <nav class="links" id="hero-links"></nav>
+        </div>
+        <p class="summary" id="hero-summary"></p>
+        <ul class="stats" id="hero-stats"></ul>
+      </div>
+    </header>
+
+    <nav class="tabs" role="tablist" aria-label="Sections">
+      <a href="#pipeline" data-tab="pipeline" role="tab" class="tab">Pipeline</a>
+      <a href="#sql" data-tab="sql" role="tab" class="tab">SQL console</a>
+      <a href="#skills" data-tab="skills" role="tab" class="tab">Skills</a>
+      <button type="button" class="tab tab-term" id="open-terminal" title="Open terminal (press ~)">~ terminal</button>
+    </nav>
+
+    <main>
+      <section id="pipeline" class="view" data-view="pipeline">
+        <div class="view-head">
+          <h2>Career as a data pipeline</h2>
+          <p>Every stage is clickable, and draggable if you feel like it. The pipes stretch, then everything snaps back where it belongs: warehouses feed the hub, the hub lands in BigQuery, and a side project runs in production on its own lane.</p>
+        </div>
+        <div class="pipeline-wrap">
+          <canvas id="pipeline-canvas" aria-label="Interactive career pipeline"></canvas>
+          <div class="legend" id="pipeline-legend"></div>
+        </div>
+        <ol class="pipeline-fallback" id="pipeline-fallback" aria-label="Career stages"></ol>
+      </section>
+
+      <section id="sql" class="view" data-view="sql" hidden>
+        <div class="view-head">
+          <h2>Query my resume</h2>
+          <p>Real SQL, real database, no server. DuckDB runs entirely in your browser. Tables: <code>experience</code>, <code>highlights</code>, <code>skills</code>, <code>projects</code>, <code>warehouses</code>, <code>leetcode</code>, <code>languages</code>.</p>
+        </div>
+        <div class="sql-layout">
+          <div class="sql-editor-col">
+            <div class="presets" id="sql-presets"></div>
+            <div class="editor-box">
+              <textarea id="sql-input" spellcheck="false" rows="7" aria-label="SQL query"></textarea>
+              <div class="editor-actions">
+                <span class="status" id="sql-status">DuckDB not loaded yet</span>
+                <div>
+                  <button type="button" class="btn ghost" id="sql-translate" title="Toy Teradata → BigQuery translator">Translate TD → BQ</button>
+                  <button type="button" class="btn primary" id="sql-run">Run <kbd>⌘↵</kbd></button>
+                </div>
+              </div>
+            </div>
+            <pre class="translate-out" id="sql-translate-out" hidden></pre>
+          </div>
+          <div class="sql-result-col">
+            <div class="result-meta" id="sql-meta"></div>
+            <div class="chart" id="sql-chart" hidden></div>
+            <div class="result-table-wrap" id="sql-result"></div>
+          </div>
+        </div>
+        <details class="schema">
+          <summary>Schema</summary>
+          <pre id="sql-schema"></pre>
+        </details>
+      </section>
+
+      <section id="skills" class="view" data-view="skills" hidden>
+        <div class="view-head">
+          <h2>Skills</h2>
+          <p>Approximate years of hands-on use. Hover a bar for where it was used.</p>
+        </div>
+        <div class="skills-grid" id="skills-grid"></div>
+      </section>
+    </main>
+
+    <aside class="panel" id="panel" aria-hidden="true">
+      <button type="button" class="panel-close" id="panel-close" aria-label="Close">×</button>
+      <div class="panel-body" id="panel-body"></div>
+    </aside>
+    <div class="panel-backdrop" id="panel-backdrop"></div>
+
+    <div class="terminal" id="terminal" hidden>
+      <div class="terminal-bar">
+        <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+        <span class="terminal-title">kakha@bigquery — zsh</span>
+        <button type="button" class="terminal-close" id="terminal-close" aria-label="Close terminal">esc</button>
+      </div>
+      <div class="terminal-screen" id="terminal-screen"></div>
+      <div class="terminal-hints">try: <b>help</b> · <b>ls</b> · <b>cat google.md</b> · <b>git log --graph</b> · <b>top</b> · <b>curl github</b> · <b>piano</b></div>
+    </div>
+
+    <footer class="footer">
+      <span>Built with TypeScript, canvas and DuckDB-WASM. No backend, no tracking.</span>
+      <span>Press <kbd>~</kbd> anywhere for the terminal.</span>
+    </footer>
+
+    <script type="module" src="/src/classic/main.ts"></script>
+  </body>
+</html>

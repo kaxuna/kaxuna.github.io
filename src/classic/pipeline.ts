@@ -1,5 +1,5 @@
 // Animated career pipeline on <canvas>. Nodes are clickable; particles flow along pipes.
-import { experiences, warehouses, formatPeriod, type Experience } from './data';
+import { experiences, warehouses, formatPeriod, type Experience } from '../data';
 
 export interface PipelineSelection {
   kind: 'experience' | 'warehouse' | 'sink';

@@ -9,7 +9,8 @@
     "preview": "vite preview",
     "shots": "mkdir -p shots && node tools/shot.mjs",
     "artifact": "node tools/artifact.mjs",
-    "og": "node tools/og.mjs"
+    "og": "node tools/og.mjs",
+    "test:game": "node tools/game-test.mjs"
   },
   "devDependencies": {
     "playwright": "^1.63.0",

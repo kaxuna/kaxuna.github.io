@@ -1,5 +1,5 @@
 // In-browser SQL console over the resume, powered by DuckDB-WASM (loaded lazily from jsDelivr).
-import { experiences, skills, warehouses, leetcode, profile, monthsBetween } from './data';
+import { experiences, skills, warehouses, leetcode, profile, monthsBetween } from '../data';
 
 type Duck = typeof import('@duckdb/duckdb-wasm');
 type Conn = import('@duckdb/duckdb-wasm').AsyncDuckDBConnection;

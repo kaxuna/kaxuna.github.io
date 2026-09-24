@@ -1,5 +1,5 @@
 // Terminal easter egg. Fake zsh over a virtual filesystem generated from data.ts.
-import { experiences, skills, leetcode, profile, formatPeriod, monthsBetween } from './data';
+import { experiences, skills, leetcode, profile, formatPeriod, monthsBetween } from '../data';
 
 interface FileEntry { name: string; content: string; }
 
