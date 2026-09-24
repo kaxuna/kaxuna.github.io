@@ -1,5 +1,5 @@
 // Hand-drawn pixel art as character grids, rasterized once to small canvases.
-// Original art: a bearded guy in a green t-shirt and his small white dog.
+// Props and enemies. The hero and the dog live in characters.ts.
 
 type Pal = Record<string, string>;
 
@@ -19,89 +19,6 @@ export function makeSprite(rows: string[], pal: Pal): HTMLCanvasElement {
   });
   return c;
 }
-
-const HERO: Pal = {
-  H: '#d9ad6c', h: '#a87a3f', S: '#f2c6a0', s: '#d99e78', E: '#2a1d14', B: '#b86f35',
-  G: '#22b35e', g: '#157a40', P: '#2c3d5c', p: '#1c2840', K: '#3b2a1f',
-};
-
-const HEAD = [
-  '......HHHH......',
-  '....HHHHHHHH....',
-  '...HHHHHHHHHh...',
-  '...hHHHHHHHHh...',
-  '...hHSSSSSSSS...',
-  '...hSSSSESSES...',
-  '...sSSSSSSSSSS..',
-  '....SSSSBBBBS...',
-  '....BBBBBBBBB...',
-  '.....BBBBBBBB...',
-  '......BBBBBB....',
-];
-const BODY = [
-  '....GGGGGGGG....',
-  '..GGGGGGGGGGGG..',
-  '..GGGGGGGGGGGG..',
-  '..GGgGGGGGGgGG..',
-  '..GG.GGGGGG.GG..',
-  '..SS.GGGGGG.SS..',
-  '.....gggggg.....',
-];
-const BODY_JUMP = [
-  '....GGGGGGGG.SS.',
-  '..GGGGGGGGGGGGG.',
-  '..GGGGGGGGGGGG..',
-  '..GGgGGGGGGgGG..',
-  '..GG.GGGGGG.....',
-  '..SS.GGGGGG.....',
-  '.....gggggg.....',
-];
-const LEGS_IDLE = [
-  '.....PPPPPP.....',
-  '.....PPP.PPP....',
-  '.....PPP.PPP....',
-  '.....PPP.PPP....',
-  '.....ppp.ppp....',
-  '....KKKK.KKKK...',
-];
-const LEGS_RUN_A = [
-  '.....PPPPPP.....',
-  '....PPPPPPPP....',
-  '...PPP....PPP...',
-  '..PPP......PPP..',
-  '..pp........pp..',
-  '.KKK........KKK.',
-];
-const LEGS_RUN_B = [
-  '.....PPPPPP.....',
-  '......PPPPP.....',
-  '......PPPP......',
-  '.....PPPpp......',
-  '.....pp..pp.....',
-  '....KKK..KKK....',
-];
-const LEGS_JUMP = [
-  '.....PPPPPP.....',
-  '....PPP..PPPP...',
-  '...PPP.....PP...',
-  '...pp......pp...',
-  '..KKK.....KKK...',
-  '................',
-];
-
-const DOG: Pal = { W: '#fbf8f2', w: '#d8d0c4', E: '#1a1a1a', N: '#1a1a1a' };
-const DOG_A = [
-  '.........ww..',
-  '........WWWW.',
-  '.......WWWWWW',
-  'ww.....WWEWWN',
-  '.WWWWWWWWWWW.',
-  '.WWWWWWWWWWw.',
-  '..WWWWWWWWw..',
-  '..WW.WW.WW...',
-  '..ww.ww.ww...',
-];
-const DOG_B = [...DOG_A.slice(0, 7), '...WW.WW.WW..', '...ww.ww.ww..'];
 
 const BUG: Pal = { R: '#e5484d', r: '#9e2a2f', W: '#ffffff', K: '#111111', A: '#4a1518', L: '#4a1518' };
 const BUG_TOP = [
@@ -203,12 +120,6 @@ const FOX_ART = [
 ];
 
 export interface Sprites {
-  heroIdle: HTMLCanvasElement;
-  heroRunA: HTMLCanvasElement;
-  heroRunB: HTMLCanvasElement;
-  heroJump: HTMLCanvasElement;
-  dogA: HTMLCanvasElement;
-  dogB: HTMLCanvasElement;
   bugA: HTMLCanvasElement;
   bugB: HTMLCanvasElement;
   bugFlat: HTMLCanvasElement;
@@ -224,12 +135,6 @@ let cache: Sprites | null = null;
 export function sprites(): Sprites {
   if (cache) return cache;
   cache = {
-    heroIdle: makeSprite([...HEAD, ...BODY, ...LEGS_IDLE], HERO),
-    heroRunA: makeSprite([...HEAD, ...BODY, ...LEGS_RUN_A], HERO),
-    heroRunB: makeSprite([...HEAD, ...BODY, ...LEGS_RUN_B], HERO),
-    heroJump: makeSprite([...HEAD, ...BODY_JUMP, ...LEGS_JUMP], HERO),
-    dogA: makeSprite(DOG_A, DOG),
-    dogB: makeSprite(DOG_B, DOG),
     bugA: makeSprite(BUG_A, BUG),
     bugB: makeSprite(BUG_B, BUG),
     bugFlat: makeSprite(BUG_FLAT, BUG),

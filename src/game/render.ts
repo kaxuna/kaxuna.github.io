@@ -3,6 +3,7 @@ import type { World } from './engine';
 import { T, TILE, ROWS, GROUND_Y } from './level';
 import type { ThemeId } from './content';
 import { sprites, drawText, textWidth } from './sprites';
+import { LOOKS, HERO_CX, DOG_FOOT, heroFrames, dogFrames } from './characters';
 
 export const VIEW_H = ROWS * TILE; // 240
 
@@ -923,16 +924,21 @@ export function render(ctx: CanvasRenderingContext2D, w: World, reduceMotion: bo
 
   // Dog, then player.
   const dog = w.dog;
-  const dimg = dog.moving && Math.floor(dog.anim * 9) % 2 ? sp.dogB : sp.dogA;
-  drawFlipped(ctx, dimg, Math.round(dog.x - camX), Math.round(dog.y - dimg.height), dog.facing < 0);
+  const df = dogFrames();
+  const dimg = dog.moving ? df.run[Math.floor(dog.anim * 10) % 4] : df.idle[Math.floor(w.t * 4) % 2];
+  drawFlipped(ctx, dimg, Math.round(dog.x - camX), Math.round(dog.y - 1 - DOG_FOOT), dog.facing < 0);
 
   const p = w.p;
-  const blink = p.invuln > 0 && Math.floor(w.t * 20) % 2 === 0;
-  if (!blink) {
-    let img = sp.heroIdle;
-    if (!p.onGround) img = sp.heroJump;
-    else if (Math.abs(p.vx) > 5) img = Math.floor(p.anim / 9) % 2 ? sp.heroRunA : sp.heroRunB;
-    drawFlipped(ctx, img, Math.round(p.x - 2 - camX), Math.round(p.y - 2), p.facing < 0);
+  const blinkInvuln = p.invuln > 0 && p.invuln < 1.1 && Math.floor(w.t * 20) % 2 === 0;
+  if (!blinkInvuln) {
+    const hf = heroFrames(LOOKS[Math.max(0, w.stage)]);
+    let img = hf.idle;
+    if (p.invuln > 1.1) img = hf.hurt;
+    else if (!p.onGround) img = p.vy < 0 ? hf.jump : hf.fall;
+    else if (p.skid) img = hf.skid;
+    else if (Math.abs(p.vx) > 5) img = hf.walk[Math.floor(p.anim / 7) % 4];
+    else if (w.t % 3.7 < 0.13) img = hf.blink;
+    drawFlipped(ctx, img, Math.round(p.x + p.w / 2 - HERO_CX - camX), Math.round(p.y + p.h - 1 - hf.foot), p.facing < 0);
   }
 
   // Particles.

@@ -1,5 +1,5 @@
 // Tiny synthesized sound effects. No audio files.
-export type SfxName = 'jump' | 'gem' | 'unlock' | 'bump' | 'break' | 'stomp' | 'hurt' | 'flag' | 'end' | 'fall';
+export type SfxName = 'grow' | 'jump' | 'gem' | 'unlock' | 'bump' | 'break' | 'stomp' | 'hurt' | 'flag' | 'end' | 'fall';
 
 const KEY = 'kp-quest-muted';
 
@@ -65,6 +65,7 @@ export class Sfx {
 
   play(name: SfxName) {
     switch (name) {
+      case 'grow': [659, 784, 988, 1319].forEach((f, i) => this.tone(f, 0.1, 'triangle', undefined, i * 0.05, 0.5)); break;
       case 'jump': this.tone(260, 0.14, 'square', 560, 0, 0.5); break;
       case 'gem': this.tone(988, 0.07, 'square', undefined, 0, 0.5); this.tone(1319, 0.14, 'square', undefined, 0.07, 0.5); break;
       case 'unlock': [523, 659, 784, 1047].forEach((f, i) => this.tone(f, 0.12, 'triangle', undefined, i * 0.06, 0.9)); break;

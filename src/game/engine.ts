@@ -1,6 +1,7 @@
 // Game simulation: player physics, tile collisions, enemies, pickups, camera.
 // Runs at a fixed 120 Hz step; rendering reads the state.
 import { Level, T, TILE, ROWS, SOLID, GROUND_Y, type Sign } from './level';
+import { hitHeight } from './characters';
 
 const G = 1450;
 const JUMP = 460;
@@ -30,6 +31,7 @@ export type GameEvent =
   | { type: 'fall' }
   | { type: 'flag'; stage: number }
   | { type: 'zone'; stage: number }
+  | { type: 'grow' }
   | { type: 'end' };
 
 interface Body { x: number; y: number; w: number; h: number; vx: number; vy: number; onGround: boolean }
@@ -41,6 +43,7 @@ export interface Player extends Body {
   invuln: number;
   stun: number;
   anim: number;
+  skid: boolean;
 }
 
 export interface Enemy extends Body {
@@ -81,7 +84,7 @@ export class World {
   camX = 0;
   private lookX = 0;
 
-  p: Player = { x: 40, y: GROUND_Y - 22, w: 12, h: 22, vx: 0, vy: 0, onGround: true, facing: 1, coyote: 0, buffer: 0, invuln: 0, stun: 0, anim: 0 };
+  p: Player = { x: 40, y: GROUND_Y - 30, w: 12, h: 30, vx: 0, vy: 0, onGround: true, facing: 1, coyote: 0, buffer: 0, invuln: 0, stun: 0, anim: 0, skid: false };
   dog = { x: 22, y: GROUND_Y, facing: 1, anim: 0, moving: false };
   private trail: { x: number; y: number; f: number }[] = [];
 
@@ -178,8 +181,13 @@ export class World {
     const g = p.vy < 0 && !c.jumpHeld ? G * 2.4 : p.vy > 0 ? G * 1.15 : G;
     p.vy = Math.min(MAX_FALL, p.vy + g * dt);
 
+    p.skid = p.onGround && dir !== 0 && p.vx !== 0 && Math.sign(p.vx) === -dir && Math.abs(p.vx) > 40;
+    const wasGround = p.onGround;
+    const fallSpeed = p.vy;
     const res = this.move(p, dt, true);
     if (res.ceil >= 0) this.hitFromBelow(res.ceil);
+    if (!wasGround && p.onGround && fallSpeed > 260) this.dust(p.x + p.w / 2, p.y + p.h, 6);
+    if (p.skid && Math.floor(this.t * 30) % 3 === 0) this.dust(p.x + (p.vx > 0 ? p.w : 0), p.y + p.h, 1);
 
     if (p.invuln > 0) p.invuln -= dt;
     p.anim += Math.abs(p.vx) * dt;
@@ -296,6 +304,12 @@ export class World {
     }
   }
 
+  private dust(x: number, y: number, n: number) {
+    for (let i = 0; i < n; i++) {
+      this.particles.push({ kind: 'dust', x: x + (Math.random() - 0.5) * 8, y: y - 1, vx: (Math.random() - 0.5) * 70, vy: -20 - Math.random() * 40, g: 120, life: 0.35, max: 0.35, color: '#f3ecd8' });
+    }
+  }
+
   private killOnTop(tx: number, ty: number) {
     const top = ty * TILE;
     for (const e of this.enemies) {
@@ -406,9 +420,21 @@ export class World {
   }
 
   private updateZone() {
-    const z = this.level.zoneAtPx(this.p.x + this.p.w / 2);
+    const p = this.p;
+    const z = this.level.zoneAtPx(p.x + p.w / 2);
     if (z === this.stage) return;
+    const prev = this.stage;
     this.stage = z;
+    const h = hitHeight(z);
+    if (h !== p.h) { p.y += p.h - h; p.h = h; }
+    if (prev >= 0 && z > prev) {
+      // Growing up / growing the beard: a burst of sparkles around the hero.
+      for (let i = 0; i < 14; i++) {
+        const a = (i / 14) * Math.PI * 2;
+        this.particles.push({ kind: 'spark', x: p.x + p.w / 2 + Math.cos(a) * 10, y: p.y + p.h / 2 + Math.sin(a) * 14, vx: Math.cos(a) * 40, vy: Math.sin(a) * 40 - 20, g: 0, life: 0.6, max: 0.6, color: i % 2 ? '#f7b733' : '#ffffff' });
+      }
+      this.emit({ type: 'grow' });
+    }
     this.checkpoint = { x: this.level.zones[z].x0 + 40, y: GROUND_Y - this.p.h };
     this.emit({ type: 'zone', stage: z });
   }
@@ -431,7 +457,7 @@ export class World {
     this.trail.push({ x: p.x, y: p.y + p.h, f: p.facing });
     if (this.trail.length > 32) this.trail.shift();
     const lag = this.trail[0];
-    const desired = lag.x + p.w / 2 - lag.f * 17 - 6;
+    const desired = lag.x + p.w / 2 - lag.f * 20 - 11;
     const dx = desired - this.dog.x;
     const maxStep = 175 * dt;
     this.dog.x += Math.max(-maxStep, Math.min(maxStep, dx));

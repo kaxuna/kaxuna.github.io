@@ -198,6 +198,7 @@ function drainEvents() {
       case 'hurt': sfx.play('hurt'); break;
       case 'fall': sfx.play('fall'); break;
       case 'flag': sfx.play('flag'); break;
+      case 'grow': sfx.play('grow'); break;
       case 'zone': ui.stage(e.stage, mode === 'play'); save(world); break;
       case 'end':
         sfx.play('end');
@@ -236,6 +237,29 @@ function frame(now: number) {
 layout();
 ui.stage(Math.max(0, world.stage), false);
 requestAnimationFrame(frame);
+
+// Sprite sheet for checking the character art: open the page with ?sprites.
+if (new URLSearchParams(location.search).has('sprites')) {
+  void import('./characters').then(({ LOOKS, heroFrames, dogFrames }) => {
+    const sheet = document.createElement('div');
+    sheet.style.cssText = 'position:fixed;inset:0;z-index:99;overflow:auto;background:#6ec6f2;padding:12px;display:flex;flex-direction:column;gap:6px';
+    const row = (cs: HTMLCanvasElement[]) => {
+      const r = document.createElement('div');
+      r.style.cssText = 'display:flex;gap:8px;align-items:flex-end';
+      for (const c of cs) {
+        const img = new Image();
+        img.src = c.toDataURL();
+        img.style.cssText = `width:${c.width * 5}px;height:${c.height * 5}px;image-rendering:pixelated`;
+        r.appendChild(img);
+      }
+      sheet.appendChild(r);
+    };
+    LOOKS.forEach((look) => { const f = heroFrames(look); row([f.idle, f.blink, ...f.walk, f.jump, f.fall, f.skid, f.hurt]); });
+    const d = dogFrames();
+    row([...d.idle, ...d.run]);
+    document.body.appendChild(sheet);
+  });
+}
 
 // Test hook for tools/game-test.mjs: open the page with ?debug.
 if (new URLSearchParams(location.search).has('debug')) {
